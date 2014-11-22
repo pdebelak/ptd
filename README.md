@@ -1,39 +1,38 @@
 # $ptd
 
-$ptd is a small, experimental (for me) javascript library.
+$ptd is a small javascript library.
 
-Its goal is to replace both jquery and angular for small, simple web projects. Mostly it is a way for me to learn about vanilla javascript.
+The goal of $ptd is to only have functions that are useful to programmers and annoying to write in pure javascript (i.e. without the help of [jQuery](http://jquery.com/)).
 
-It currently supports modern browsers (IE 10+, Chrome, Safari, Firefox) with no real plans to worry about IE 9 and before.
+It comes with two functions: `$ptd.ready()` and `$ptd.on()`.
 
-Example usage:
+It supports modern browsers (IE 9+, Chrome, Safari, Firefox).
 
-Like jquery
+Usage:
+
+`$ptd.ready()` functions like jQuery's `$(document).ready()` function. It fires when all DOM content is loaded and then no longer listens for that event.
 
 ```
 $ptd.ready(function() {
-  $ptd.dom('#anId').addClass('radical');
+	document.getElementById('#new_user_form').addEventListener('submit', function(event){
+		event.preventDefault();
+	});
 });
 ```
 
-Like angular
+`$ptd.on()` is like jQuery's `$(selector).on(event, delegate, callback)` function. It is meant to create event listeners on items that do not yet exist in the DOM.
+
+The syntax is: `$ptd.on(event, selector, delegate, callback)` with the `selector` being something currently existing in the DOM that is a parent of the items that you want to add the event listener to. `'body'` is usually a safe bet, but being more specific is better, if possible.
 
 ```
-// js
-$ptd.controller(function(scope) {
-  scope.tab = 1;
-  
-  scope.setTab = function(num) {
-    scope.tab = num;
-  }
-
-  scope.selectedTab = function(num) {
-    return scope.tab === num;
-  }
+$ptd.ready(function() {
+	$ptd.on('click', 'body', '#new-item', function() {
+		console.log('Works!');
+	});
+	document.getElementsByTagName('body').innerHTML += '<p id="new-item">Click me!</p>';
+	document.getElementById('new-item').click();
+	// Works! will be outputted to the console.
 });
-// html
-<a href="tab1" ptd-click="setTab(1)">Tab 1</a>
-<p ptd-show="selectedTab(1)">Tab 1 paragraph</p>
 ```
 
-TODO: Add documentation, link to example app
+The minified version of the library is 591 bytes, so have fun! You can grab the pretty version `ptd.js` or the minified version `ptd.min.js` from the bin folder of this repository.
