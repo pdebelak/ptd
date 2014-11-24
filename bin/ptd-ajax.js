@@ -5,8 +5,8 @@ var $ptd = (function($ptd) {
         request = new XMLHttpRequest();
         request.open(args.requestType, args.url, true);
 
-        if (args.requestType === 'POST') {
-            request.setRequestHeader('Content-Type', args.contentType || 'application/x-www-form-urlencoded');
+        if (args.contentType) {
+            request.setRequestHeader('Content-Type', args.contentType);
         }
 
         request.onload = function() {
@@ -25,7 +25,22 @@ var $ptd = (function($ptd) {
             }
         };
 
-        request.send(args.data);
+
+        function parseData(anObject) {
+            var string = '';
+            for (var key in anObject) {
+                if (anObject.hasOwnProperty(key)) {
+                    string += key + '=' + anObject[key] + '&';
+                }
+            }
+            // removes the final unneeded &
+            string = string.substring(0, string.length - 1);
+            return string;
+        }
+
+        var data = args.data instanceof Element ? new FormData(args.data) : typeof args.data === 'object' ? parseData(args.data) : args.data;
+
+        request.send(data);
     }
 
     return $ptd;
