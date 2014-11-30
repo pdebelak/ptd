@@ -38,6 +38,7 @@ var $ptd = (function($ptd) {
             return string;
         }
 
+        // passing in a form element only works in IE 10+, so make sure that is okay or you have a back-up plan
         var data = args.data instanceof Element ? new FormData(args.data) : typeof args.data === 'object' ? parseData(args.data) : args.data;
 
         request.send(data);
